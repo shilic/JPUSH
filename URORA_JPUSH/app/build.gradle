@@ -23,14 +23,36 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "slc.urora_jpush"
+        applicationId "slc.urora_jpush" //JPush 上注册的包名.
         minSdk 29
         targetSdk 33
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
+        ndk { // defaultConfig下
+            //选择要添加的对应 cpu 类型的 .so 库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+            //abiFilters 'x86', 'x86_64', 'mips', 'mips64'
+        } // defaultConfig下
+        manifestPlaceholders = [ // defaultConfig下
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "c60248570cd8e169c6c8fa13", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+//                MEIZU_APPKEY : "MZ-魅族的APPKEY",
+//                MEIZU_APPID : "MZ-魅族的APPID",
+//                XIAOMI_APPID : "小米的APPID",//JPush5.5.3开始，可以不添加MI-前缀.
+//                XIAOMI_APPKEY : "小米的APPKEY",//JPush5.5.3开始，可以不添加MI-前缀.
+//                OPPO_APPKEY : "OP-oppo的APPKEY",
+//                OPPO_APPID : "OP-oppo的APPID",
+//                OPPO_APPSECRET : "OP-oppo的APPSECRET",
+//                VIVO_APPKEY : "vivo的APPKEY",
+//                VIVO_APPID : "vivo的APPID",
+//                HONOR_APPID : "honor的APPID",
+//                NIO_APPID : "nio的APPID"
+        ] // defaultConfig下
+    } // defaultConfig
 
     buildTypes {
         release {
@@ -56,4 +78,52 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    // 此处以JPush 5.6.0 版本为例，注意：从 5.0.0 版本开始可以自动拉取 JCore 包，无需另外配置
+    implementation 'cn.jiguang.sdk:jpush:5.6.0'
+    implementation 'cn.jiguang.sdk:joperate:2.0.2'     // 可选，集成极光分析SDK后，即可支持行为触发推送消息、推送转化率统计，用户行为分析和用户标签等功能
+
+//    //若不集成厂商通道，可直接跳过以下依赖
+//    // 极光厂商插件版本与接入 JPush 版本保持一致，下同
+//    // 接入华为厂商
+//    implementation 'com.huawei.hms:push:6.13.0.300'
+//    implementation 'cn.jiguang.sdk.plugin:huawei:5.6.0'
+//
+//    // 接入 FCM 厂商
+//    implementation 'com.google.firebase:firebase-messaging:24.1.0'
+//    implementation 'cn.jiguang.sdk.plugin:fcm:5.6.0'
+//
+//    // 接入魅族厂商
+//    implementation 'cn.jiguang.sdk.plugin:meizu:5.6.0'
+//    // JPush Android SDK v5.2.3 开始，需要单独引入 魅族 厂商 aar ，请下载官网 SDK 包并把 jpush-android-xxx-release/third-push/meizu/libs 下的 aar 文件单独拷贝一份到应用 module/libs 下
+//    implementation(name: 'push-internal-5.0.3', ext: 'aar')
+//
+//    // 接入 VIVO 厂商
+//    implementation 'cn.jiguang.sdk.plugin:vivo:5.6.0'
+//
+//
+//    // 接入小米厂商
+//    implementation 'cn.jiguang.sdk.plugin:xiaomi:5.6.0'
+//
+//    // 接入 OPPO 厂商
+//    implementation 'cn.jiguang.sdk.plugin:oppo:5.6.0'
+//    // JPush Android SDK v4.6.0 开始，需要单独引入 oppo 厂商 aar ，请下载官网 SDK 包并把 jpush-android-xxx-release/third-push/oppo/libs 下的 aar 文件单独拷贝一份到应用 module/libs 下
+//    implementation(name: 'com.heytap.msp_3.5.3', ext: 'aar')
+//    //以下为 OPPO 3.1.0 aar需要依赖
+//    implementation 'com.google.code.gson:gson:2.10.1'
+//    implementation 'commons-codec:commons-codec:1.6'
+//    implementation 'androidx.annotation:annotation:1.1.0'
+//
+//    // 接入荣耀厂商
+//    implementation 'cn.jiguang.sdk.plugin:honor:5.6.0'
+//    //需要单独引入荣耀厂商 aar ，请下载官网 SDK 包并把 jpush-android-xxx-release/third-push/honor/libs 下的 aar 文件单独拷贝一份到应用 module/libs 下
+//    implementation(name: 'HiPushSDK-8.0.12.307', ext: 'aar')
+//
+//    // 接入蔚来厂商
+//    implementation 'cn.jiguang.sdk.plugin:nio:5.6.0'
+//    //JPush Android SDK v5.6.0 开始需要单独引入蔚来厂商 aar ，请下载官网 SDK 包并把 jpush-android-xxx-release/third-push/nio/libs 下的 aar 文件单独拷贝一份到应用 module/libs 下
+//    implementation(name: 'niopush-sdk-v1.0', ext: 'aar')
 }
+
+//apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.huawei.agconnect'

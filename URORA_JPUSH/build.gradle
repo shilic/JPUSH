@@ -7,13 +7,40 @@ buildscript {
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         //maven { url 'https://nexus.web.cern.ch/nexus/content/repositories/public/'}
         google()
+        //jcenter()
         mavenCentral()
+        // hms， 若不集成华为厂商通道，可直接跳过
+        //maven { url 'https://developer.huawei.com/repo/' }
+        // fcm， 若不集成 FCM 通道，可直接跳过
+        maven { url "https://maven.google.com" }
     }
+
     dependencies {
         //classpath 'com.android.tools.build:gradle:8.0.2'
         // 其他依赖项
+        // fcm，若不集成 FCM 通道，可直接跳过
+        //classpath 'com.google.gms:google-services:4.3.8'
+        // hms，若不集成华为厂商通道，可直接跳过
+        //classpath 'com.huawei.agconnect:agcp:1.6.0.300'
     }
+//    allprojects {
+//        repositories {
+//            //maven { url 'https://maven.aliyun.com/repository/jcenter' }
+//            //maven { url 'https://maven.aliyun.com/repository/public/' }
+//            //maven { url 'https://maven.aliyun.com/repository/central' }
+//            //maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+//            //maven { url 'https://nexus.web.cern.ch/nexus/content/repositories/public/'}
+//            google()
+//            //jcenter()
+//            mavenCentral()
+//            //hms
+//            maven {url 'http://developer.huawei.com/repo/'}
+//            //fcm
+//            maven { url "https://maven.google.com" }
+//        }
+//    }
 }
+
 plugins {
     id 'com.android.application' version '8.0.2' apply false
     id 'com.android.library' version '8.0.2' apply false

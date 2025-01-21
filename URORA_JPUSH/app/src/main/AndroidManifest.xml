@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="slc.urora_jpush">
+
+    <!-- Required -->
+    <!-- 请求自定义权限 官方定义的权限，允许应用接收 JPush 内部代码发送的广播消息。 -->
+    <uses-permission android:name="slc.urora_jpush.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature" />
+<!--    <uses-permission android:name="slc.urora_jpush.permission.JPUSH_MESSAGE" />-->
+    <!-- 声明 INTERNET 权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 适配Android13，弹出通知必须权限-->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <!-- 声明 ACCESS_NETWORK_STATE 权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".ExampleApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,6 +27,35 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.URORA_JPUSH"
         tools:targetApi="31">
+<!--        android:name=".myReceiver.MyReceiver"-->
+        <!-- Required since 3.0.7 -->
+        <!-- 新的 tag/alias 接口结果返回需要开发者配置一个自定的广播 -->
+        <!-- 3.3.0开始所有事件将通过该类回调 -->
+        <!-- 该广播需要继承 JPush 提供的 JPushMessageReceiver 类, 并如下新增一个 Intent-Filter -->
+        <receiver
+            android:name=".myReceiver.MyReceiver"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.RECEIVER_MESSAGE" />
+                <category android:name="slc.urora_jpush" />
+            </intent-filter>
+        </receiver>
+<!--      如果你使用的 JCore 是 2.0.0 及以上的版本，需要额外在 Androidmanifest 中配置一个 Service，
+以在更多手机平台上获得更稳定的支持，示例如下。（JCore1.x 版本不需要）
+从JPush5.2.0<=SDK版本<=JPush5.3.1，AndroidManifest 中配置一个Service，以在更多手机平台上获得更稳定的支持，示例如下： android:name=".myService.MyService" -->
+        <!-- Since JCore2.0.0 Required SDK核心功能-->
+        <!-- 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false -->
+        <!-- 这个是自定义Service，要继承极光 JCommonService ，可以在更多手机平台上使得推送通道保持的更稳定 -->
+        <service android:name=".myService.MyService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":pushcore">
+            <intent-filter>
+                <action android:name="cn.jiguang.user.service.action" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -21,6 +65,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Required. For publish channel feature -->
+        <!-- JPUSH_CHANNEL 是为了方便开发者统计 APK 分发渠道。-->
+        <!-- 例如: -->
+        <!-- 发到 Google Play 的 APK 可以设置为 google-play; -->
+        <!-- 发到其他市场的 APK 可以设置为 xxx-market。 -->
+        <meta-data android:name="JPUSH_CHANNEL" android:value="developer-default"/>
+        <!-- Required. AppKey copied from Portal -->
+        <meta-data android:name="JPUSH_APPKEY" android:value="c60248570cd8e169c6c8fa13"/>
     </application>
 
 </manifest>
